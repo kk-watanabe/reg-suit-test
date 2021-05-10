@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   "stories": [
     "../src/**/*.stories.mdx",
@@ -6,5 +8,24 @@ module.exports = {
   "addons": [
     "@storybook/addon-links",
     "@storybook/addon-essentials"
-  ]
+  ],
+  webpackFinal: async config => {
+    config.resolve.alias = {
+      vue: "vue/dist/vue.esm.js",
+      "@": path.resolve(__dirname, "../src"),
+    };
+
+    config.module.rules.push({
+      test: /\.scss$/,
+      use: [
+        "style-loader",
+        "css-loader",
+        {
+          loader: "sass-loader"
+        }
+      ]
+    });
+
+    return config;
+  }
 }
